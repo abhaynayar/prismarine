@@ -22,7 +22,11 @@ loader:                         ; the loader label (defined as entry point in li
     push dword 3            ; arg3
     push dword 2            ; arg2
     push dword 1            ; arg1
+
     call sum_of_three       ; call the function, the result will be in eax
+
+    ;mov eax, 0x000B8000
+    ;mov word [eax], 0x8241
 
 .loop:
     jmp .loop                   ; loop forever
