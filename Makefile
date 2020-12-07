@@ -1,17 +1,24 @@
 AS = nasm
 ASFLAGS = -f elf
 
-OBJECTS = loader.o kmain.o io.o
+OBJECTS =  io.o fb.o loader.o kmain.o serial.o
 LDFLAGS = -T link.ld -melf_i386
 
-CC = gcc
-CFLAGS = -m32 -nostdlib -nostdinc -fno-builtin -fno-stack-protector \
-         -nostartfiles -nodefaultlibs -Wall -Wextra -Werror -c
+CC = g++
+#TODO: See which flags to remove
+CFLAGS = -Wall -Wextra -Werror \
+		-c -O2 -m32 -ffreestanding \
+		-fno-builtin -fno-stack-protector -fno-exceptions -fno-rtti \
+		-nostartfiles -nodefaultlibs -nostdlib -nostdinc \
+
+all: kernel.elf
 
 kernel.elf: $(OBJECTS)
 	ld $(LDFLAGS) $(OBJECTS) -o kernel.elf
-all: kernel.elf
+
 image: os.iso
+
+# TODO: Make sense of this
 os.iso: kernel.elf
 	mkdir -p iso/boot/grub              # create the folder structure
 	cp stage2_eltorito iso/boot/grub/   # copy the bootloader
@@ -34,15 +41,13 @@ bochs: os.iso
 qemu: os.iso
 	qemu-system-x86_64 -boot d -cdrom os.iso -m 512
 
-%.o: %.c
+%.o: %.cc
 	$(CC) $(CFLAGS) $< -o $@
 
 %.o: %.s
 	$(AS) $(ASFLAGS) $< -o $@
 
-
 clean:
 	rm -rf *.o kernel.elf os.iso
-	rm -rf bochslog.txt
+	rm -rf bochslog.txt com1.out
 	rm -rf iso
-
