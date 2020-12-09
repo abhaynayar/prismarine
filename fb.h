@@ -12,23 +12,19 @@
 #define SCREEN_WIDTH 80
 #define SCREEN_HEIGHT 50
 
-// TODO: Implement scroll
+#define VIDEO_ADDRESS 0xB8000
+
 class FrameBuffer {
-    
-    char *base;
-
-    // Cursor
-    int row, col;
-
-    // Text color
-    int fg, bg;
+private: 
+    FrameBuffer() {} // Static class
+    static int row, col;
+    static int fg, bg;
 
 public:
-    FrameBuffer();
-    void write_cell(unsigned int i, char c);
-    void move_cursor();
-    void write(char *str, unsigned int len);
-    void clear_screen();
+    static void write_cell(unsigned int i, char c);
+    static void move_cursor();
+    static void write(const char *str);
+    static void clear_screen();
 };
 
 #endif /* INCLUDE_FB_H */

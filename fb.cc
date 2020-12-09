@@ -1,19 +1,13 @@
 extern "C" {
-    #include "serial.h"
-    #include "io.h"
-    #include "fb.h"
+#include "serial.h"
+#include "io.h"
+#include "fb.h"
 }
 
-FrameBuffer::FrameBuffer() {
-    base = (char*) 0x000B8000;
-
-    row = 0;
-    col = 0;
-
-    // Color: white on black
-    fg = 0;
-    bg = 15;
-}
+int FrameBuffer::row = 0;
+int FrameBuffer::col = 0;
+int FrameBuffer::fg = 0;
+int FrameBuffer::bg = 15;
 
 /** write_cell:
  *  Writes a character with the given foreground and background to position i
@@ -25,6 +19,7 @@ FrameBuffer::FrameBuffer() {
  *  @param bg The background color
  */
 void FrameBuffer::write_cell(unsigned int i, char c) {
+    unsigned char* base = (unsigned char*) VIDEO_ADDRESS;
     base[i] = c;
     base[i+1] = ((fg & 0x0F) << 4) | (bg & 0x0F);
 }
@@ -44,9 +39,10 @@ void FrameBuffer::move_cursor() {
     col++; // NOTE: No need to update row (not sure)
 }
 
-void FrameBuffer::write(char *str, unsigned int len) {
 
-    for (unsigned int i=0; i<len; ++i) {
+void FrameBuffer::write(const char *str) {
+
+    for (unsigned int i=0; str[i] != '\0'; ++i) {
         int pos = row*SCREEN_WIDTH + col;
 
         if (str[i] == '\n') {

@@ -1,6 +1,6 @@
 extern "C" {
-#include "io.h"
-#include "serial.h"
+    #include "io.h"
+    #include "serial.h"
 }
 
 Serial::Serial() {
@@ -83,4 +83,3 @@ void Serial::configure_buffers() {
 void Serial::configure_modem() {
     outb(SERIAL_MODEM_COMMAND_PORT(com), 0x03);
 }
-

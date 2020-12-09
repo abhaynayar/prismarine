@@ -1,25 +1,32 @@
 extern "C" {
-    #include "serial.h"
-    #include "io.h"
-    #include "fb.h"
+
+#include "isr.h"
+#include "keyboard.h"
+#include "serial.h"
+#include "io.h"
+#include "fb.h"
+
 }
 
-// TODO: Use fixed datatypes (u8, u16, etc.)
-// TODO: Create a strlen() function
-// TODO: QEMU serial output
+// TODO:
+// + GDT (what? why?)
+// + Implement scroll
+// + Implement timers
+// + Implement QEMU serial support
+// + Implement serial->write(char*)
 
 int main() {
-    
-    // NOTE: https://littleosbook.github.io/#segmentation
     char str[] = "abhay nayar\nis a good boy";
+    FrameBuffer::clear_screen();
+    FrameBuffer::write(str);
 
-    FrameBuffer fb;
-    fb.clear_screen();
-    fb.write(str, 25);
+    //Serial s;
+    //s.write('w');
 
-    Serial s;
-    s.write('w');
+    asm volatile("sti");
+    isr_install();
+    init_keyboard();
+    //__asm__ __volatile__("int $2");
+    //__asm__ __volatile__("int $3");
     return 0;
 }
-
-
