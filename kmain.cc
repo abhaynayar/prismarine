@@ -12,8 +12,11 @@ extern "C" {
 // + GDT (what? why?)
 // + Implement scroll
 // + Implement timers
+// + Fix blinking cursor position
 // + Implement QEMU serial support
 // + Implement serial->write(char*)
+// + Fix newline after a text wrap
+// + Fix FrameBuffer::static variable confusion
 
 int main() {
     char str[] = "abhay nayar\nis a good boy";

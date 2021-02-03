@@ -10,7 +10,7 @@
 #define FB_LOW_BYTE_COMMAND     15
 
 #define SCREEN_WIDTH 80
-#define SCREEN_HEIGHT 50
+#define SCREEN_HEIGHT 25
 
 #define VIDEO_ADDRESS 0xB8000
 
@@ -18,13 +18,13 @@ class FrameBuffer {
 private: 
     FrameBuffer() {} // Static class
     static int row, col;
-    static int fg, bg;
-
+    static void scroll();
+    static void write_cell(int x, int y, char c);
+    static char read_cell(int x, int y);
 public:
-    static void write_cell(unsigned int i, char c);
-    static void move_cursor();
     static void write(const char *str);
     static void clear_screen();
+    static void move_cursor(int x, int y);
 };
 
 #endif /* INCLUDE_FB_H */

@@ -47,11 +47,9 @@ static void keyboard_callback(registers_t regs) {
         //kprint_backspace();
     } else if (scancode == ENTER) {
         FrameBuffer::write("\n");
-        //user_input(key_buffer); [> kernel-controlled function <]
         key_buffer[0] = '\0';
     } else {
         char letter = sc_ascii[(int)scancode];
-        /* Remember that kprint only accepts char[] */
         char str[2] = {letter, '\0'};
         append(key_buffer, letter);
         FrameBuffer::write(str);
